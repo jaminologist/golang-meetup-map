@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Add Map</title>
+    <title>Golang Meetup Map</title>
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
@@ -25,6 +25,26 @@
       <div class="row">
         <div id="map"></div>
       </div>
+      <div class="row">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Meetup</th>
+              <th scope="col">Date</th>
+              <th scope="col">Website</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{range .Meetups}}
+            <tr>
+              <td>{{ .Name}}</td>
+              <td>{{ .Date}}</td>
+              <td><a href="{{ .Link}}" target="_blank">{{ .Link}}</a></td>
+            </tr>
+            {{end}}
+          </tbody>
+        </table>
+      </div>
     </div>
   </body>
   <script>
@@ -38,7 +58,7 @@
           '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       }
     ).addTo(map);
-    {{range .}}
+    {{range .Meetups}}
       var icon = L.icon({
       iconUrl: "{{ .Icon}}",
       iconSize: [40, 40],
