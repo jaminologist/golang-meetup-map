@@ -1,4 +1,4 @@
-name: GitHub Actions Demo
+name: Deploy To GH Pages
 on: [push]
 permissions:
  contents: write
@@ -12,10 +12,7 @@ jobs:
         with:
           go-version: '1.19'
           check-latest: true
-      - run: go run ./cmd/main.go
-      - name: List files in the repository
-        run: |
-          ls -R ${{ github.workspace }}
+      - run: go run ./cmd/main.go -root ${{github.workspace}}
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:

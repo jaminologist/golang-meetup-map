@@ -4,13 +4,21 @@ import (
 	"bytes"
 	_ "embed"
 	"encoding/csv"
+	"flag"
 	"log"
 	"os"
+	"path"
 	"text/template"
 )
 
 //go:embed meetups.csv
 var b []byte
+
+var root string
+
+func init() {
+	flag.StringVar(&root, "root", ".", "root directory of the project")
+}
 
 func main() {
 	csvReader := csv.NewReader(bytes.NewReader(b))
@@ -25,8 +33,8 @@ func main() {
 		}
 	}
 
-	meetups := convertDataToMeetups(data)
-	parse("./template/index.html", meetups)
+	meetups := convertDataToMeetups(root, data)
+	parse(root, root+"/cmd/template/index.html", meetups)
 }
 
 var (
@@ -51,13 +59,13 @@ type Meetup struct {
 	Longitude string
 }
 
-func convertDataToMeetups(records []map[string]string) MeetupMapPage {
+func convertDataToMeetups(root string, records []map[string]string) MeetupMapPage {
 	meetups := make([]Meetup, 0)
 	for _, record := range records {
 
-		iconURL := "./icons/" + record["Icon"]
-		if _, err := os.Stat("../docs/" + iconURL); err != nil {
-			iconURL = "./icons/Go-Logo_Blue.png"
+		iconURL := path.Join("icons", record["Icon"])
+		if _, err := os.Stat(path.Join(root, "docs", iconURL)); err != nil {
+			iconURL = path.Join("icons", "Go-Logo_Blue.png")
 		}
 
 		meetup := Meetup{
@@ -75,14 +83,14 @@ func convertDataToMeetups(records []map[string]string) MeetupMapPage {
 	}
 }
 
-func parse(path string, meetupMapPage MeetupMapPage) {
-	t, err := template.ParseFiles(path)
+func parse(root string, templatePath string, meetupMapPage MeetupMapPage) {
+	t, err := template.ParseFiles(templatePath)
 	if err != nil {
 		log.Print(err)
 		return
 	}
 
-	f, err := os.Create("../docs/index_test.html")
+	f, err := os.Create(path.Join(root, "docs", "index.html"))
 	if err != nil {
 		log.Println("create file: ", err)
 		return
