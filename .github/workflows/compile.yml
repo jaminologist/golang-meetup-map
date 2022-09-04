@@ -1,7 +1,10 @@
 name: GitHub Actions Demo
 on: [push]
+permissions:
+ contents: write
 jobs:
-  Build-Templates:
+  Build-And-Deploy:
+    concurrency: ci-${{ github.ref }} 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -13,4 +16,8 @@ jobs:
       - name: List files in the repository
         run: |
           ls -R ${{ github.workspace }}
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: docs
       - run: echo "🍏 This job's status is ${{ job.status }}."
