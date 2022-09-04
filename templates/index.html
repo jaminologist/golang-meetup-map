@@ -31,18 +31,15 @@
           '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       }
     ).addTo(map);
-    
-       var latitude = "51.521282"
-       var marker = L.marker([latitude, -0.080945])
+
+    var marker = L.marker([51.5435, -0.09])
       .addTo(map)
-      .bindPopup("September London Gophers")
+      .bindPopup("<b>Hello world!</b><br />I am a popup.")
       .openPopup();
-    
-       var latitude = "51.509335"
-       var marker = L.marker([latitude, -0.081453])
+
+    var lgMarker = L.marker([51.521282, -0.080945])
       .addTo(map)
-      .bindPopup("Women Who Go London")
+      .bindPopup("<b>September London Gophers</b><br />")
       .openPopup();
-    
   </script>
 </html>
