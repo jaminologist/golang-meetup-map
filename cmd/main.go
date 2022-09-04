@@ -21,6 +21,7 @@ func main() {
 
 type Meetup struct {
 	Name      string
+	Icon      string
 	Link      string
 	Latitude  string
 	Longitude string
@@ -29,11 +30,18 @@ type Meetup struct {
 func recordsToMeetups(records [][]string) []Meetup {
 	meetups := make([]Meetup, 0)
 	for _, record := range records {
+
+		iconURL := "./icons/" + record[1]
+		if _, err := os.Stat("../docs/" + iconURL); err != nil {
+			iconURL = "./icons/Go-Logo_Blue.png"
+		}
+
 		meetup := Meetup{
 			Name:      record[0],
-			Link:      record[1],
-			Latitude:  record[2],
-			Longitude: record[3],
+			Icon:      iconURL,
+			Link:      record[2],
+			Latitude:  record[3],
+			Longitude: record[4],
 		}
 		meetups = append(meetups, meetup)
 	}
