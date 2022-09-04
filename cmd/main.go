@@ -82,7 +82,7 @@ func parse(path string, meetupMapPage MeetupMapPage) {
 		return
 	}
 
-	f, err := os.Create("../docs/index.html")
+	f, err := os.Create("../docs/index_test.html")
 	if err != nil {
 		log.Println("create file: ", err)
 		return
