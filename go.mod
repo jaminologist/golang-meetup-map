@@ -1,3 +1,3 @@
-module bryjammin/golangmeetupmap
+module jaminologist/golangmeetupmap
 
 go 1.19
