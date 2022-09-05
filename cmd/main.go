@@ -1,18 +1,15 @@
 package main
 
 import (
-	"bytes"
 	_ "embed"
 	"encoding/csv"
 	"flag"
+	"jaminologist/golangmeetupmap/internal/csvconvert"
+	"jaminologist/golangmeetupmap/internal/templater"
 	"log"
 	"os"
 	"path"
-	"text/template"
 )
-
-//go:embed meetups.csv
-var b []byte
 
 var root string
 
@@ -21,85 +18,34 @@ func init() {
 }
 
 func main() {
-	csvReader := csv.NewReader(bytes.NewReader(b))
-	records, _ := csvReader.ReadAll()
+
+	// Read meetups.csv and split into headers and rows.
+	meetupsCSV, err := os.Open(path.Join(root, "docs", "meetups.csv"))
+	defer meetupsCSV.Close()
+	if err != nil {
+		log.Fatalf("failed to read meetup.csv: %v", err)
+	}
+	records, err := csv.NewReader(meetupsCSV).ReadAll()
+	if err != nil {
+		log.Fatalf("failed to read csv records: %v", err)
+	}
 
 	headers := records[0]
-	data := make([]map[string]string, 0)
-	for i, row := range records[1:] {
-		data = append(data, make(map[string]string))
-		for j, cell := range row {
-			data[i][headers[j]] = cell
-		}
-	}
+	rows := records[1:]
 
-	meetups := convertDataToMeetups(root, data)
-	parse(root, root+"/cmd/template/index.html", meetups)
-}
-
-var (
-	headerName      = "Name"
-	headerDate      = "Date"
-	headerIcon      = "Icon"
-	headerLink      = "Link"
-	headerLatitude  = "Latitude"
-	headerLongitude = "Longitude"
-)
-
-type MeetupMapPage struct {
-	Meetups []Meetup
-}
-
-type Meetup struct {
-	Name      string
-	Date      string
-	Icon      string
-	Link      string
-	Latitude  string
-	Longitude string
-}
-
-func convertDataToMeetups(root string, records []map[string]string) MeetupMapPage {
-	meetups := make([]Meetup, 0)
-	for _, record := range records {
-
-		iconURL := path.Join("icons", record["Icon"])
-		if _, err := os.Stat(path.Join(root, "docs", iconURL)); err != nil {
-			iconURL = path.Join("icons", "Go-Logo_Blue.png")
-		}
-
-		meetup := Meetup{
-			Name:      record[headerName],
-			Icon:      iconURL,
-			Date:      record[headerDate],
-			Link:      record[headerLink],
-			Latitude:  record[headerLatitude],
-			Longitude: record[headerLongitude],
-		}
-		meetups = append(meetups, meetup)
-	}
-	return MeetupMapPage{
-		Meetups: meetups,
-	}
-}
-
-func parse(root string, templatePath string, meetupMapPage MeetupMapPage) {
-	t, err := template.ParseFiles(templatePath)
+	// Read icons directly and create map of saved icons
+	files, err := os.ReadDir((path.Join(root, "docs", "icons")))
 	if err != nil {
-		log.Print(err)
-		return
+		log.Fatal(err)
 	}
 
-	f, err := os.Create(path.Join(root, "docs", "index.html"))
-	if err != nil {
-		log.Println("create file: ", err)
-		return
+	icons := make(map[string]bool)
+	for _, file := range files {
+		icons[file.Name()] = true
 	}
 
-	err = t.Execute(f, meetupMapPage)
-	if err != nil {
-		log.Print("execute: ", err)
-		return
+	meetups := csvconvert.ConvertRowsToMeetups(headers, rows, icons)
+	if err := templater.Parse(root, path.Join(root, "docs", "templates", "index.html"), meetups); err != nil {
+		log.Fatalf("failed to create template: %v", err)
 	}
-	f.Close()
 }
