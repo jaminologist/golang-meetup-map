@@ -28,8 +28,30 @@ type Meetup struct {
 	Longitude string
 }
 
-func ReadMeetups(csvReader io.Reader, icons map[string]bool) ([]Meetup, error) {
-	records, err := csv.NewReader(csvReader).ReadAll()
+//go:generate go run github.com/vektra/mockery/cmd/mockery -name dataParser -inpkg --filename data_parser_mock.go
+type dataParser interface {
+	parseRequestURI(rawURL string) (*url.URL, error)
+	parseFloat(s string, bitSize int) (float64, error)
+	newReader(r io.Reader) (records [][]string, err error)
+}
+
+// DataParse struct implements dataParser to extend test coverage
+type DataParse struct{}
+
+func (*DataParse) parseRequestURI(rawURL string) (*url.URL, error) {
+	return url.ParseRequestURI(rawURL)
+}
+
+func (*DataParse) parseFloat(s string, bitSize int) (float64, error) {
+	return strconv.ParseFloat(s, bitSize)
+}
+
+func (*DataParse) newReader(r io.Reader) (records [][]string, err error) {
+	return csv.NewReader(r).ReadAll()
+}
+
+func ReadMeetups(d dataParser, csvReader io.Reader, icons map[string]bool) ([]Meetup, error) {
+	records, err := d.newReader(csvReader)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read csv records: %w", err)
 	}
@@ -41,14 +63,14 @@ func ReadMeetups(csvReader io.Reader, icons map[string]bool) ([]Meetup, error) {
 	headers := records[0]
 	rows := records[1:]
 
-	meetups, err := convertRowsToMeetups(headers, rows, icons)
+	meetups, err := convertRowsToMeetups(d, headers, rows, icons)
 	if err != nil {
 		return nil, fmt.Errorf("failed convert rows into Meetups: %w", err)
 	}
 	return meetups, nil
 }
 
-func convertRowsToMeetups(headers []string, rows [][]string, icons map[string]bool) ([]Meetup, error) {
+func convertRowsToMeetups(d dataParser, headers []string, rows [][]string, icons map[string]bool) ([]Meetup, error) {
 	mappedRows := make([]map[string]string, 0)
 	for i, row := range rows {
 		mappedRows = append(mappedRows, make(map[string]string))
@@ -81,15 +103,15 @@ func convertRowsToMeetups(headers []string, rows [][]string, icons map[string]bo
 			return nil, fmt.Errorf("row %d: %w", index, err)
 		}
 
-		if err := validateLink(meetup.Link); err != nil {
+		if err := validateLink(d, meetup.Link); err != nil {
 			return nil, fmt.Errorf("row %d: %w", index, err)
 		}
 
-		if err := validateLatitude(meetup.Latitude); err != nil {
+		if err := validateLatitude(d, meetup.Latitude); err != nil {
 			return nil, fmt.Errorf("row %d: %w", index, err)
 		}
 
-		if err := validateLongitude(meetup.Longitude); err != nil {
+		if err := validateLongitude(d, meetup.Longitude); err != nil {
 			return nil, fmt.Errorf("row %d: %w", index, err)
 		}
 		meetups = append(meetups, meetup)
@@ -112,6 +134,7 @@ func validateDate(date string) error {
 }
 
 func validateIcon(icon string, icons map[string]bool) error {
+	fmt.Println(icons)
 	if _, ok := icons[icon]; !ok {
 		if icon != "" {
 			return fmt.Errorf("unable to validate icon %s, it is present in docs/icons", icon)
@@ -120,23 +143,23 @@ func validateIcon(icon string, icons map[string]bool) error {
 	return nil
 }
 
-func validateLink(link string) error {
-	if _, err := url.ParseRequestURI(link); err != nil {
-		return fmt.Errorf("unable to validate url: %s, error: %w", link, err)
+func validateLink(d dataParser, link string) error {
+	if _, err := d.parseRequestURI(link); err != nil {
+		return fmt.Errorf("unable to validate url=%s, error=%w", link, err)
 	}
 	return nil
 }
 
-func validateLatitude(latitude string) error {
-	if _, err := strconv.ParseFloat(latitude, 64); err != nil {
-		return fmt.Errorf("unable to validate latitude: %s, error: %w", latitude, err)
+func validateLatitude(d dataParser, latitude string) error {
+	if _, err := d.parseFloat(latitude, 64); err != nil {
+		return fmt.Errorf("unable to validate latitude=%s err=%w", latitude, err)
 	}
 	return nil
 }
 
-func validateLongitude(longitude string) error {
-	if _, err := strconv.ParseFloat(longitude, 64); err != nil {
-		return fmt.Errorf("unable to validate longitude %s, %w", longitude, err)
+func validateLongitude(d dataParser, longitude string) error {
+	if _, err := d.parseFloat(longitude, 64); err != nil {
+		return fmt.Errorf("unable to validate longitude=%s err=%w", longitude, err)
 	}
 	return nil
 }

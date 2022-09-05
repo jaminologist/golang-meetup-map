@@ -27,7 +27,7 @@ func TestReadMeetups(t *testing.T) {
 			t.Errorf("failed to open meetups.csv: %v", err)
 		}
 
-		_, err = csvconvert.ReadMeetups(meetupsCSV, icons)
+		_, err = csvconvert.ReadMeetups(&csvconvert.DataParse{}, meetupsCSV, icons)
 		if err != nil {
 			t.Errorf("failed to read meetups.csv %v", err)
 		}

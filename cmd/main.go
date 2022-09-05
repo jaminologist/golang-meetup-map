@@ -35,7 +35,7 @@ func main() {
 		log.Fatalf("failed to open meetups.csv: %v", err)
 	}
 
-	meetups, err := csvconvert.ReadMeetups(meetupsCSV, icons)
+	meetups, err := csvconvert.ReadMeetups(&csvconvert.DataParse{}, meetupsCSV, icons)
 	if err != nil {
 		log.Fatalf("failed to read meetups.csv: %v", err)
 	}
