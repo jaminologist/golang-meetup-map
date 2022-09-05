@@ -56,6 +56,12 @@
             </tr>
             
             <tr>
+              <td>Go meetup @ Cloud Pirates (Amsterdam)</td>
+              <td>2022-09-28</td>
+              <td><a href="https://www.meetup.com/golang-amsterdam/events/288223636/" target="_blank">https://www.meetup.com/golang-amsterdam/events/288223636/</a></td>
+            </tr>
+            
+            <tr>
               <td>October London Gophers</td>
               <td>2022-10-19</td>
               <td><a href="https://www.meetup.com/londongophers/events/287490709/" target="_blank">https://www.meetup.com/londongophers/events/287490709/</a></td>
@@ -105,6 +111,23 @@
        var marker = L.marker([latitude, longitude], {icon: icon})
       .addTo(map)
       .bindPopup("<b><a href=\"https:\/\/www.meetup.com\/women-who-go-london\/events\/287816448\/\" target=\"_blank\">Women Who Go London</a></b>");
+      marker.on('mouseover',function() {
+        this.openPopup();
+      });
+      marker.on('mouseout',function() {
+        this.openPopup();
+      });
+    
+      var icon = L.icon({
+      iconUrl: "icons/default.png",
+      iconSize: [40, 40],
+      popupAnchor: [0, -20]
+          });
+       var latitude = "52.375840"
+       var longitude = "4.926071"
+       var marker = L.marker([latitude, longitude], {icon: icon})
+      .addTo(map)
+      .bindPopup("<b><a href=\"https:\/\/www.meetup.com\/golang-amsterdam\/events\/288223636\/\" target=\"_blank\">Go meetup @ Cloud Pirates (Amsterdam)</a></b>");
       marker.on('mouseover',function() {
         this.openPopup();
       });
