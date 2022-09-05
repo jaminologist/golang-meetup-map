@@ -1,12 +1,23 @@
 name: Deploy To GH Pages
 on: 
+  workflow_dispatch:
   push:
     branches:
       - main
 permissions:
  contents: write
 jobs:
-  Build-And-Deploy:
+  test-and-validate: 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '1.19'
+          check-latest: true
+      - run: go test ./...
+      - run: echo "✅ Tests Passed Successfully "
+  build-and-deploy:
     concurrency: ci-${{ github.ref }} 
     runs-on: ubuntu-latest
     steps:
