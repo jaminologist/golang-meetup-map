@@ -1,9 +1,9 @@
-name: Deploy To GH Pages
+name: Golang Meetup Map
 on: 
   workflow_dispatch:
+  pull_request:
   push:
-    branches:
-      - main
+  
 permissions:
  contents: write
 jobs:
@@ -19,6 +19,7 @@ jobs:
       - run: echo "✅ Tests Passed Successfully "
   build-and-deploy:
     needs: test-and-validate
+    if: github.ref == 'refs/heads/main'
     concurrency: ci-${{ github.ref }} 
     runs-on: ubuntu-latest
     steps:
