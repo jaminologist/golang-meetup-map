@@ -14,7 +14,7 @@ The current layout is:
 
 | Name        | Date           | Icon | Link | Latitude | Longitude | 
 | :-------------: |:-------------:| :-----:| :-----:| :-----:| :-----:|
-| Waterworld Gophers |2500-01-29| default.png| https://en.wikipedia.org/wiki/Waterworld | 24.9948056 | -71.0351806 |
+| Waterworld Gophers |2500-01-29| default.jpg| https://en.wikipedia.org/wiki/Waterworld | 24.9948056 | -71.0351806 |
 
 
 - **Name:** Name of the Meetup/Event
