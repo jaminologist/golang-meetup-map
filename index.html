@@ -83,6 +83,8 @@
           '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       }
     ).addTo(map);
+
+    
     
       var icon = L.icon({
       iconUrl: "icons/LONDON-GOPHERS-300.png",
@@ -98,7 +100,7 @@
         this.openPopup();
       });
       marker.on('mouseout',function() {
-        this.openPopup();
+        this.closePopup();
       });
     
       var icon = L.icon({
@@ -115,7 +117,7 @@
         this.openPopup();
       });
       marker.on('mouseout',function() {
-        this.openPopup();
+        this.closePopup();
       });
     
       var icon = L.icon({
@@ -132,7 +134,7 @@
         this.openPopup();
       });
       marker.on('mouseout',function() {
-        this.openPopup();
+        this.closePopup();
       });
     
       var icon = L.icon({
@@ -149,7 +151,7 @@
         this.openPopup();
       });
       marker.on('mouseout',function() {
-        this.openPopup();
+        this.closePopup();
       });
     
   </script>
