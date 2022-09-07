@@ -9,6 +9,7 @@
       crossorigin=""
     />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="./style.css" />
     <script
       src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
@@ -17,21 +18,21 @@
     ></script>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg bg-light">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="https://github.com/jaminologist/golang-meetup-map">Github</a>
-      </div>
+    <nav class="navbar navbar-expand-lg bg-dark">
     </nav>
-    <div class="container text-center">
-      <div class="row align-items-center">
-        <div class="col">
+    <div class="container">
+      <div class="row text-center align-items-center">
+        <div class="col m-1">
           <h1 class="display-1">Golang Meetup Map</h1>
         </div>
       </div>
       <!--The div element for the map -->
-      <div class="row">
-        <div id="map"></div>
+      <div class="row text-center">
+        <div class="col m-1">
+          <div id="map"></div>
+        </div>
       </div>
+      <hr>
       <div class="row">
         <table class="table">
           <thead>
@@ -52,11 +53,38 @@
           </tbody>
         </table>
       </div>
+      <hr>
+      <div class="row">
+        <h1>Want To Add Your Meetup?</h1>
+      </div>
+      <div class="row">
+        <p>
+          If you have a meetup that you want to add to the Map, check out the <a href="https://github.com/jaminologist/golang-meetup-map">Readme.md</a>. It is as simple as opening a pull request and adding it to our 
+          <a href="https://github.com/jaminologist/golang-meetup-map/blob/main/docs/meetups.csv">meetups.csv</a>. 
+        </p>
+      </div>
+      <div class="row">
+        <p>
+          Once merged into master, your meetup will be automatically added to the Map!
+        </p>
+      </div> 
+      <hr>
+    </div>
+    <div class="container">
+      <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+        <div class="col-md-4 d-flex">
+          <span class="text-muted">Jaminologist</span>
+        </div>
+        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+          <li class="ms-3"><a class="text-muted" href="https://twitter.com/jaminologist"><i class="bi bi-twitter"></i></a></li>
+          <li class="ms-3"><a class="text-muted" href="https://github.com/jaminologist/golang-meetup-map"><i class="bi bi-github"></i></a></li>
+          <li class="ms-3"><a class="text-muted" href="https://www.jaminologist.com/"><i class="bi bi-globe"></i></a></li>
+        </ul>
+      </footer>
     </div>
   </body>
   <script>
     var map = L.map("map").setView([51.505, -0.09], 13);
-
     var tiles = L.tileLayer(
       "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
       {
