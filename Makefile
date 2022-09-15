@@ -3,7 +3,7 @@ dev:
 	cd ./docs && npx http-server
 
 archive:
-	go run ./cmd/archive/main.go -root "C:\Users\Home\Documents\GitHub\golang-meetup-map\"
+	go run ./cmd/archive/main.go -root "."
 
 test:
 	go test ./...

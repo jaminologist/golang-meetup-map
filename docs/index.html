@@ -42,13 +42,31 @@
             </tr>
           </thead>
           <tbody>
-            {{range .Meetups}}
+            
             <tr>
-              <td>{{ .Name}}</td>
-              <td>{{ .Date}}</td>
-              <td><a href="{{ .Link}}" target="_blank">{{ .Link}}</a></td>
+              <td>September London Gophers</td>
+              <td>Wednesday, 21 September 2022</td>
+              <td><a href="https://www.meetup.com/londongophers/events/287490695/" target="_blank">https://www.meetup.com/londongophers/events/287490695/</a></td>
             </tr>
-            {{end}}
+            
+            <tr>
+              <td>Women Who Go London</td>
+              <td>Tuesday, 27 September 2022</td>
+              <td><a href="https://www.meetup.com/women-who-go-london/events/287816448/" target="_blank">https://www.meetup.com/women-who-go-london/events/287816448/</a></td>
+            </tr>
+            
+            <tr>
+              <td>Go meetup @ Cloud Pirates (Amsterdam)</td>
+              <td>Wednesday, 28 September 2022</td>
+              <td><a href="https://www.meetup.com/golang-amsterdam/events/288223636/" target="_blank">https://www.meetup.com/golang-amsterdam/events/288223636/</a></td>
+            </tr>
+            
+            <tr>
+              <td>October London Gophers</td>
+              <td>Wednesday, 19 October 2022</td>
+              <td><a href="https://www.meetup.com/londongophers/events/287490709/" target="_blank">https://www.meetup.com/londongophers/events/287490709/</a></td>
+            </tr>
+            
           </tbody>
         </table>
       </div>
@@ -93,24 +111,75 @@
       }
     ).addTo(map);
 
-    // This section loops over the Meetups and puts the markers on the Map
-    {{range .Meetups}}
+    
+    
       var icon = L.icon({
-      iconUrl: "icons/{{ .Icon}}",
+      iconUrl: "icons/LONDON-GOPHERS-300.png",
       iconSize: [40, 40],
       popupAnchor: [0, -20]
           });
-       var latitude = "{{ .Latitude}}"
-       var longitude = "{{ .Longitude}}"
+       var latitude = "51.521282"
+       var longitude = "-0.080945"
        var marker = L.marker([latitude, longitude], {icon: icon})
       .addTo(map)
-      .bindPopup("<b><a href=\"{{ .Link}}\" target=\"_blank\">{{ .Name}}</a></b>");
+      .bindPopup("<b><a href=\"https:\/\/www.meetup.com\/londongophers\/events\/287490695\/\" target=\"_blank\">September London Gophers</a></b>");
       marker.on('mouseover',function() {
         this.openPopup();
       });
       marker.on('mouseout',function() {
         this.closePopup();
       });
-    {{end}}
+    
+      var icon = L.icon({
+      iconUrl: "icons/women_who_go_london_400x400.jpg",
+      iconSize: [40, 40],
+      popupAnchor: [0, -20]
+          });
+       var latitude = "51.509335"
+       var longitude = "-0.081453"
+       var marker = L.marker([latitude, longitude], {icon: icon})
+      .addTo(map)
+      .bindPopup("<b><a href=\"https:\/\/www.meetup.com\/women-who-go-london\/events\/287816448\/\" target=\"_blank\">Women Who Go London</a></b>");
+      marker.on('mouseover',function() {
+        this.openPopup();
+      });
+      marker.on('mouseout',function() {
+        this.closePopup();
+      });
+    
+      var icon = L.icon({
+      iconUrl: "icons/default.jpg",
+      iconSize: [40, 40],
+      popupAnchor: [0, -20]
+          });
+       var latitude = "52.375840"
+       var longitude = "4.926071"
+       var marker = L.marker([latitude, longitude], {icon: icon})
+      .addTo(map)
+      .bindPopup("<b><a href=\"https:\/\/www.meetup.com\/golang-amsterdam\/events\/288223636\/\" target=\"_blank\">Go meetup @ Cloud Pirates (Amsterdam)</a></b>");
+      marker.on('mouseover',function() {
+        this.openPopup();
+      });
+      marker.on('mouseout',function() {
+        this.closePopup();
+      });
+    
+      var icon = L.icon({
+      iconUrl: "icons/LONDON-GOPHERS-300.png",
+      iconSize: [40, 40],
+      popupAnchor: [0, -20]
+          });
+       var latitude = "51.507217"
+       var longitude = "-0.127586"
+       var marker = L.marker([latitude, longitude], {icon: icon})
+      .addTo(map)
+      .bindPopup("<b><a href=\"https:\/\/www.meetup.com\/londongophers\/events\/287490709\/\" target=\"_blank\">October London Gophers</a></b>");
+      marker.on('mouseover',function() {
+        this.openPopup();
+      });
+      marker.on('mouseout',function() {
+        this.closePopup();
+      });
+    
   </script>
 </html>

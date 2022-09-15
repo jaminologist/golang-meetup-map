@@ -9,10 +9,32 @@ import (
 )
 
 type MeetupMapPage struct {
-	Meetups []model.Meetup
+	Meetups []templateMeetup
 }
 
-func Parse(root string, templatePath string, meetups []model.Meetup) error {
+type templateMeetup struct {
+	Name      string
+	Date      string
+	Icon      string
+	Link      string
+	Latitude  string
+	Longitude string
+}
+
+func Parse(root string, templatePath string, ms []model.Meetup) error {
+
+	meetups := make([]templateMeetup, 0)
+	for _, m := range ms {
+		meetups = append(meetups, templateMeetup{
+			Name:      m.Name,
+			Date:      m.Date.Format("Monday, 2 January 2006"),
+			Icon:      m.Icon,
+			Link:      m.Link,
+			Latitude:  m.Latitude,
+			Longitude: m.Longitude,
+		})
+	}
+
 	t, err := template.ParseFiles(templatePath)
 	if err != nil {
 		return fmt.Errorf("failed to parse template: %w", err)
