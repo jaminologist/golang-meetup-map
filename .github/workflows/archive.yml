@@ -9,6 +9,7 @@ on:
   
 permissions:
  contents: write
+ pull-requests: write
 jobs:
   test-and-validate: 
     runs-on: ubuntu-latest
@@ -34,3 +35,6 @@ jobs:
       - run: go run ./cmd/archive/main.go -root ${{github.workspace}}    
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
+        with:
+          title: "bot 🤖: clean up meetups"
+          body: "removes outdated meetups"
