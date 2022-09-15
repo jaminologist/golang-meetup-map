@@ -5,10 +5,13 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"jaminologist/golangmeetupmap/internal/model"
 	"net/url"
 	"strconv"
 	"time"
 )
+
+const dateLayoutYYYYMMDD = "2006-01-02"
 
 var (
 	headerName      = "Name"
@@ -19,16 +22,7 @@ var (
 	headerLongitude = "Longitude"
 )
 
-type Meetup struct {
-	Name      string
-	Date      string
-	Icon      string
-	Link      string
-	Latitude  string
-	Longitude string
-}
-
-func ReadMeetups(csvReader io.Reader, icons map[string]bool) ([]Meetup, error) {
+func ReadMeetups(csvReader io.Reader, icons map[string]bool) ([]model.Meetup, error) {
 	records, err := csv.NewReader(csvReader).ReadAll()
 	if err != nil {
 		return nil, fmt.Errorf("failed to read csv records: %w", err)
@@ -48,7 +42,7 @@ func ReadMeetups(csvReader io.Reader, icons map[string]bool) ([]Meetup, error) {
 	return meetups, nil
 }
 
-func convertRowsToMeetups(headers []string, rows [][]string, icons map[string]bool) ([]Meetup, error) {
+func convertRowsToMeetups(headers []string, rows [][]string, icons map[string]bool) ([]model.Meetup, error) {
 	mappedRows := make([]map[string]string, 0)
 	for i, row := range rows {
 		mappedRows = append(mappedRows, make(map[string]string))
@@ -57,11 +51,10 @@ func convertRowsToMeetups(headers []string, rows [][]string, icons map[string]bo
 		}
 	}
 
-	meetups := make([]Meetup, 0)
+	meetups := make([]model.Meetup, 0)
 	for i, row := range mappedRows {
-		meetup := Meetup{
+		meetup := model.Meetup{
 			Name:      row[headerName],
-			Date:      row[headerDate],
 			Icon:      row[headerIcon],
 			Link:      row[headerLink],
 			Latitude:  row[headerLatitude],
@@ -73,9 +66,11 @@ func convertRowsToMeetups(headers []string, rows [][]string, icons map[string]bo
 			return nil, fmt.Errorf("row %d: %w", index, err)
 		}
 
-		if err := validateDate(meetup.Date); err != nil {
+		date, err := time.Parse(dateLayoutYYYYMMDD, row[headerDate])
+		if err != nil {
 			return nil, fmt.Errorf("row %d: %w", index, err)
 		}
+		meetup.Date = date
 
 		if err := validateIcon(meetup.Icon, icons); err != nil {
 			return nil, fmt.Errorf("row %d: %w", index, err)
@@ -105,7 +100,7 @@ func validateName(name string) error {
 }
 
 func validateDate(date string) error {
-	if _, err := time.Parse("2006-01-02", date); err != nil {
+	if _, err := time.Parse(dateLayoutYYYYMMDD, date); err != nil {
 		return fmt.Errorf("unable to validate date: %s, error: %w", date, err)
 	}
 	return nil
@@ -139,4 +134,21 @@ func validateLongitude(longitude string) error {
 		return fmt.Errorf("unable to validate longitude %s, %w", longitude, err)
 	}
 	return nil
+}
+
+func ConvertMeetupsToRows(meetups []model.Meetup) (rows [][]string) {
+	rows = append(rows, []string{headerName, headerDate, headerIcon, headerLink, headerLatitude, headerLongitude})
+	for _, meetup := range meetups {
+		rows = append(rows,
+			[]string{
+				meetup.Name,
+				meetup.Date.Format(dateLayoutYYYYMMDD),
+				meetup.Icon,
+				meetup.Link,
+				meetup.Latitude,
+				meetup.Longitude,
+			},
+		)
+	}
+	return rows
 }
