@@ -1,4 +1,4 @@
-name: Golang Meetup Map
+name: Archive Meetups
 on: 
   workflow_dispatch:
   schedule:

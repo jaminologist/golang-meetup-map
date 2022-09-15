@@ -1,4 +1,4 @@
-name: Golang Meetup Map
+name: Validate And Deploy
 on: 
   workflow_dispatch:
   pull_request:
