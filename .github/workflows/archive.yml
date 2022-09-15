@@ -20,8 +20,9 @@ jobs:
           check-latest: true
       - run: go test ./...
       - run: echo "✅ Tests Passed Successfully "
-  archive-meetups-generate-pr:
+  archive-meetups-create-pr:
     needs: test-and-validate
+    if: github.ref == 'refs/heads/main'
     concurrency: ci-${{ github.ref }} 
     runs-on: ubuntu-latest
     steps:
