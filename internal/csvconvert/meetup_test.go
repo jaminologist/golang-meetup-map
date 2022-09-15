@@ -4,24 +4,25 @@ import (
 	"bytes"
 	"encoding/csv"
 	"io"
+	"jaminologist/golangmeetupmap/internal/model"
 	"reflect"
 	"testing"
+	"time"
 )
 
 func TestReadMeetups(t *testing.T) {
-
-	testMeetup1 := Meetup{
+	testMeetup1 := model.Meetup{
 		Name:      "Name",
-		Date:      "2022-01-29",
+		Date:      time.Date(2022, time.January, 29, 0, 0, 0, 0, time.UTC),
 		Icon:      "Icon",
 		Link:      "https://www.google.com",
 		Latitude:  "24.9948056",
 		Longitude: "-71.0351806",
 	}
 
-	testMeetup2 := Meetup{
+	testMeetup2 := model.Meetup{
 		Name:      "Name2",
-		Date:      "2022-01-30",
+		Date:      time.Date(2022, time.January, 30, 0, 0, 0, 0, time.UTC),
 		Icon:      "Icon2",
 		Link:      "https://www.bing.com",
 		Latitude:  "-25.9948056",
@@ -37,7 +38,7 @@ func TestReadMeetups(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    []Meetup
+		want    []model.Meetup
 		wantErr bool
 	}{
 		{
@@ -49,7 +50,7 @@ func TestReadMeetups(t *testing.T) {
 					testMeetup2.Icon: true,
 				},
 			},
-			want: []Meetup{
+			want: []model.Meetup{
 				testMeetup1,
 				testMeetup2,
 			},
@@ -58,7 +59,7 @@ func TestReadMeetups(t *testing.T) {
 		{
 			name: "when name is empty, should return err",
 			args: args{
-				csvReader: meetupsToCSVReader(Meetup{"", testMeetup1.Date, testMeetup1.Icon, testMeetup1.Link, testMeetup1.Latitude, testMeetup1.Longitude}),
+				csvReader: meetupsToCSVReader(model.Meetup{"", testMeetup1.Date, testMeetup1.Icon, testMeetup1.Link, testMeetup1.Latitude, testMeetup1.Longitude}),
 				icons: map[string]bool{
 					testMeetup1.Icon: true,
 				},
@@ -69,7 +70,7 @@ func TestReadMeetups(t *testing.T) {
 		{
 			name: "when date is incorrect format, should return err",
 			args: args{
-				csvReader: meetupsToCSVReader(Meetup{testMeetup1.Name, "29-01-2022", testMeetup1.Icon, testMeetup1.Link, testMeetup1.Latitude, testMeetup1.Longitude}),
+				csvReader: stringSliceToCSVReader([]string{testMeetup1.Name, "29-01-2022", testMeetup1.Icon, testMeetup1.Link, testMeetup1.Latitude, testMeetup1.Longitude}),
 				icons: map[string]bool{
 					testMeetup1.Icon: true,
 				},
@@ -80,7 +81,7 @@ func TestReadMeetups(t *testing.T) {
 		{
 			name: "when icon is not found, should return err",
 			args: args{
-				csvReader: meetupsToCSVReader(Meetup{testMeetup1.Name, testMeetup1.Date, testMeetup1.Icon, testMeetup1.Link, testMeetup1.Latitude, testMeetup1.Longitude}),
+				csvReader: meetupsToCSVReader(model.Meetup{testMeetup1.Name, testMeetup1.Date, testMeetup1.Icon, testMeetup1.Link, testMeetup1.Latitude, testMeetup1.Longitude}),
 				icons:     map[string]bool{},
 			},
 			want:    nil,
@@ -89,7 +90,7 @@ func TestReadMeetups(t *testing.T) {
 		{
 			name: "when link is not url, should return err",
 			args: args{
-				csvReader: meetupsToCSVReader(Meetup{testMeetup1.Name, testMeetup1.Date, testMeetup1.Icon, "hyrule", testMeetup1.Latitude, testMeetup1.Longitude}),
+				csvReader: meetupsToCSVReader(model.Meetup{testMeetup1.Name, testMeetup1.Date, testMeetup1.Icon, "hyrule", testMeetup1.Latitude, testMeetup1.Longitude}),
 				icons:     map[string]bool{},
 			},
 			want:    nil,
@@ -98,7 +99,7 @@ func TestReadMeetups(t *testing.T) {
 		{
 			name: "when latitude is not a number, should return err",
 			args: args{
-				csvReader: meetupsToCSVReader(Meetup{testMeetup1.Name, testMeetup1.Date, testMeetup1.Icon, testMeetup1.Link, "latitude", testMeetup1.Longitude}),
+				csvReader: meetupsToCSVReader(model.Meetup{testMeetup1.Name, testMeetup1.Date, testMeetup1.Icon, testMeetup1.Link, "latitude", testMeetup1.Longitude}),
 				icons:     map[string]bool{},
 			},
 			want:    nil,
@@ -107,7 +108,7 @@ func TestReadMeetups(t *testing.T) {
 		{
 			name: "when longitude is not a number, should return err",
 			args: args{
-				csvReader: meetupsToCSVReader(Meetup{testMeetup1.Name, testMeetup1.Date, testMeetup1.Icon, testMeetup1.Link, testMeetup1.Latitude, "longitude"}),
+				csvReader: meetupsToCSVReader(model.Meetup{testMeetup1.Name, testMeetup1.Date, testMeetup1.Icon, testMeetup1.Link, testMeetup1.Latitude, "longitude"}),
 				icons:     map[string]bool{},
 			},
 			want:    nil,
@@ -128,12 +129,23 @@ func TestReadMeetups(t *testing.T) {
 	}
 }
 
-func meetupsToCSVReader(meetups ...Meetup) io.Reader {
+func meetupsToCSVReader(meetups ...model.Meetup) io.Reader {
 	var buf bytes.Buffer
 	writer := csv.NewWriter(&buf)
 	writer.Write([]string{"Name", "Date", "Icon", "Link", "Latitude", "Longitude"})
 	for _, meetup := range meetups {
-		writer.Write([]string{meetup.Name, meetup.Date, meetup.Icon, meetup.Link, meetup.Latitude, meetup.Longitude})
+		writer.Write([]string{meetup.Name, meetup.Date.Format("2006-01-02"), meetup.Icon, meetup.Link, meetup.Latitude, meetup.Longitude})
+	}
+	writer.Flush()
+	return bytes.NewReader(buf.Bytes())
+}
+
+func stringSliceToCSVReader(rows ...[]string) io.Reader {
+	var buf bytes.Buffer
+	writer := csv.NewWriter(&buf)
+	writer.Write([]string{"Name", "Date", "Icon", "Link", "Latitude", "Longitude"})
+	for _, row := range rows {
+		writer.Write(row)
 	}
 	writer.Flush()
 	return bytes.NewReader(buf.Bytes())

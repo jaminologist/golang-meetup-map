@@ -3,16 +3,16 @@ package templater
 import (
 	"fmt"
 	"html/template"
-	"jaminologist/golangmeetupmap/internal/csvconvert"
+	"jaminologist/golangmeetupmap/internal/model"
 	"os"
 	"path"
 )
 
 type MeetupMapPage struct {
-	Meetups []csvconvert.Meetup
+	Meetups []model.Meetup
 }
 
-func Parse(root string, templatePath string, meetups []csvconvert.Meetup) error {
+func Parse(root string, templatePath string, meetups []model.Meetup) error {
 	t, err := template.ParseFiles(templatePath)
 	if err != nil {
 		return fmt.Errorf("failed to parse template: %w", err)
