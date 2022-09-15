@@ -36,7 +36,7 @@
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">Meetup</th>
+              <th scope="col">Meetup (Click To Show On Map)</th>
               <th scope="col">Date</th>
               <th scope="col">Website</th>
             </tr>
@@ -44,25 +44,25 @@
           <tbody>
             
             <tr>
-              <td>September London Gophers</td>
+              <td><span class="pointer" onclick="flyTo(&#34;51.521282&#34;, &#34;-0.080945&#34;)"><i class="bi bi-geo-alt-fill"></i> September London Gophers</span></td>
               <td>Wednesday, 21 September 2022</td>
               <td><a href="https://www.meetup.com/londongophers/events/287490695/" target="_blank">https://www.meetup.com/londongophers/events/287490695/</a></td>
             </tr>
             
             <tr>
-              <td>Women Who Go London</td>
+              <td><span class="pointer" onclick="flyTo(&#34;51.509335&#34;, &#34;-0.081453&#34;)"><i class="bi bi-geo-alt-fill"></i> Women Who Go London</span></td>
               <td>Tuesday, 27 September 2022</td>
               <td><a href="https://www.meetup.com/women-who-go-london/events/287816448/" target="_blank">https://www.meetup.com/women-who-go-london/events/287816448/</a></td>
             </tr>
             
             <tr>
-              <td>Go meetup @ Cloud Pirates (Amsterdam)</td>
+              <td><span class="pointer" onclick="flyTo(&#34;52.375840&#34;, &#34;4.926071&#34;)"><i class="bi bi-geo-alt-fill"></i> Go meetup @ Cloud Pirates (Amsterdam)</span></td>
               <td>Wednesday, 28 September 2022</td>
               <td><a href="https://www.meetup.com/golang-amsterdam/events/288223636/" target="_blank">https://www.meetup.com/golang-amsterdam/events/288223636/</a></td>
             </tr>
             
             <tr>
-              <td>October London Gophers</td>
+              <td><span class="pointer" onclick="flyTo(&#34;51.507217&#34;, &#34;-0.127586&#34;)"><i class="bi bi-geo-alt-fill"></i> October London Gophers</span></td>
               <td>Wednesday, 19 October 2022</td>
               <td><a href="https://www.meetup.com/londongophers/events/287490709/" target="_blank">https://www.meetup.com/londongophers/events/287490709/</a></td>
             </tr>
@@ -122,7 +122,7 @@
        var longitude = "-0.080945"
        var marker = L.marker([latitude, longitude], {icon: icon})
       .addTo(map)
-      .bindPopup("<b><a href=\"https:\/\/www.meetup.com\/londongophers\/events\/287490695\/\" target=\"_blank\">September London Gophers</a></b>");
+      .bindPopup("<b><a href=\"https:\/\/www.meetup.com\/londongophers\/events\/287490695\/\" target=\"_blank\">September London Gophers</a></b></br>Wednesday, 21 September 2022");
       marker.on('mouseover',function() {
         this.openPopup();
       });
@@ -139,7 +139,7 @@
        var longitude = "-0.081453"
        var marker = L.marker([latitude, longitude], {icon: icon})
       .addTo(map)
-      .bindPopup("<b><a href=\"https:\/\/www.meetup.com\/women-who-go-london\/events\/287816448\/\" target=\"_blank\">Women Who Go London</a></b>");
+      .bindPopup("<b><a href=\"https:\/\/www.meetup.com\/women-who-go-london\/events\/287816448\/\" target=\"_blank\">Women Who Go London</a></b></br>Tuesday, 27 September 2022");
       marker.on('mouseover',function() {
         this.openPopup();
       });
@@ -156,7 +156,7 @@
        var longitude = "4.926071"
        var marker = L.marker([latitude, longitude], {icon: icon})
       .addTo(map)
-      .bindPopup("<b><a href=\"https:\/\/www.meetup.com\/golang-amsterdam\/events\/288223636\/\" target=\"_blank\">Go meetup @ Cloud Pirates (Amsterdam)</a></b>");
+      .bindPopup("<b><a href=\"https:\/\/www.meetup.com\/golang-amsterdam\/events\/288223636\/\" target=\"_blank\">Go meetup @ Cloud Pirates (Amsterdam)</a></b></br>Wednesday, 28 September 2022");
       marker.on('mouseover',function() {
         this.openPopup();
       });
@@ -173,7 +173,7 @@
        var longitude = "-0.127586"
        var marker = L.marker([latitude, longitude], {icon: icon})
       .addTo(map)
-      .bindPopup("<b><a href=\"https:\/\/www.meetup.com\/londongophers\/events\/287490709\/\" target=\"_blank\">October London Gophers</a></b>");
+      .bindPopup("<b><a href=\"https:\/\/www.meetup.com\/londongophers\/events\/287490709\/\" target=\"_blank\">October London Gophers</a></b></br>Wednesday, 19 October 2022");
       marker.on('mouseover',function() {
         this.openPopup();
       });
@@ -181,5 +181,9 @@
         this.closePopup();
       });
     
+
+    function flyTo(latitude, longitude) {
+      map.flyTo([latitude, longitude], 14)
+    }
   </script>
 </html>

@@ -36,7 +36,7 @@
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">Meetup</th>
+              <th scope="col">Meetup (Click To Show On Map)</th>
               <th scope="col">Date</th>
               <th scope="col">Website</th>
             </tr>
@@ -44,7 +44,7 @@
           <tbody>
             {{range .Meetups}}
             <tr>
-              <td>{{ .Name}}</td>
+              <td><span class="pointer" onclick="flyTo({{ .Latitude}}, {{ .Longitude}})"><i class="bi bi-geo-alt-fill"></i> {{ .Name}}</span></td>
               <td>{{ .Date}}</td>
               <td><a href="{{ .Link}}" target="_blank">{{ .Link}}</a></td>
             </tr>
@@ -104,7 +104,7 @@
        var longitude = "{{ .Longitude}}"
        var marker = L.marker([latitude, longitude], {icon: icon})
       .addTo(map)
-      .bindPopup("<b><a href=\"{{ .Link}}\" target=\"_blank\">{{ .Name}}</a></b>");
+      .bindPopup("<b><a href=\"{{ .Link}}\" target=\"_blank\">{{ .Name}}</a></b></br>{{ .Date}}");
       marker.on('mouseover',function() {
         this.openPopup();
       });
@@ -112,5 +112,9 @@
         this.closePopup();
       });
     {{end}}
+
+    function flyTo(latitude, longitude) {
+      map.flyTo([latitude, longitude], 14)
+    }
   </script>
 </html>
