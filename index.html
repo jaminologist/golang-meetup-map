@@ -45,6 +45,12 @@
           <tbody>
             
             <tr>
+              <td>July London Gophers</td>
+              <td>2022-07-20 00:00:00 &#43;0000 UTC</td>
+              <td><a href="https://www.meetup.com/londongophers/events/287490695/" target="_blank">https://www.meetup.com/londongophers/events/287490695/</a></td>
+            </tr>
+            
+            <tr>
               <td>September London Gophers</td>
               <td>2022-09-21 00:00:00 &#43;0000 UTC</td>
               <td><a href="https://www.meetup.com/londongophers/events/287490695/" target="_blank">https://www.meetup.com/londongophers/events/287490695/</a></td>
@@ -113,6 +119,23 @@
     ).addTo(map);
 
     
+    
+      var icon = L.icon({
+      iconUrl: "icons/LONDON-GOPHERS-300.png",
+      iconSize: [40, 40],
+      popupAnchor: [0, -20]
+          });
+       var latitude = "51.521282"
+       var longitude = "-0.080945"
+       var marker = L.marker([latitude, longitude], {icon: icon})
+      .addTo(map)
+      .bindPopup("<b><a href=\"https:\/\/www.meetup.com\/londongophers\/events\/287490695\/\" target=\"_blank\">July London Gophers</a></b>");
+      marker.on('mouseover',function() {
+        this.openPopup();
+      });
+      marker.on('mouseout',function() {
+        this.closePopup();
+      });
     
       var icon = L.icon({
       iconUrl: "icons/LONDON-GOPHERS-300.png",
