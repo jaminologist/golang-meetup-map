@@ -44,18 +44,6 @@
           <tbody>
             
             <tr>
-              <td><span class="pointer" onclick="flyTo(&#34;51.521282&#34;, &#34;-0.080945&#34;)"><i class="bi bi-geo-alt-fill"></i> September London Gophers</span></td>
-              <td>Wednesday, 21 September 2022</td>
-              <td><a href="https://www.meetup.com/londongophers/events/287490695/" target="_blank">https://www.meetup.com/londongophers/events/287490695/</a></td>
-            </tr>
-            
-            <tr>
-              <td><span class="pointer" onclick="flyTo(&#34;51.509335&#34;, &#34;-0.081453&#34;)"><i class="bi bi-geo-alt-fill"></i> Women Who Go London</span></td>
-              <td>Tuesday, 27 September 2022</td>
-              <td><a href="https://www.meetup.com/women-who-go-london/events/287816448/" target="_blank">https://www.meetup.com/women-who-go-london/events/287816448/</a></td>
-            </tr>
-            
-            <tr>
               <td><span class="pointer" onclick="flyTo(&#34;52.375840&#34;, &#34;4.926071&#34;)"><i class="bi bi-geo-alt-fill"></i> Go meetup @ Cloud Pirates (Amsterdam)</span></td>
               <td>Wednesday, 28 September 2022</td>
               <td><a href="https://www.meetup.com/golang-amsterdam/events/288223636/" target="_blank">https://www.meetup.com/golang-amsterdam/events/288223636/</a></td>
@@ -112,40 +100,6 @@
     ).addTo(map);
 
     
-    
-      var icon = L.icon({
-      iconUrl: "icons/LONDON-GOPHERS-300.png",
-      iconSize: [40, 40],
-      popupAnchor: [0, -20]
-          });
-       var latitude = "51.521282"
-       var longitude = "-0.080945"
-       var marker = L.marker([latitude, longitude], {icon: icon})
-      .addTo(map)
-      .bindPopup("<b><a href=\"https:\/\/www.meetup.com\/londongophers\/events\/287490695\/\" target=\"_blank\">September London Gophers</a></b></br>Wednesday, 21 September 2022");
-      marker.on('mouseover',function() {
-        this.openPopup();
-      });
-      marker.on('mouseout',function() {
-        this.closePopup();
-      });
-    
-      var icon = L.icon({
-      iconUrl: "icons/women_who_go_london_400x400.jpg",
-      iconSize: [40, 40],
-      popupAnchor: [0, -20]
-          });
-       var latitude = "51.509335"
-       var longitude = "-0.081453"
-       var marker = L.marker([latitude, longitude], {icon: icon})
-      .addTo(map)
-      .bindPopup("<b><a href=\"https:\/\/www.meetup.com\/women-who-go-london\/events\/287816448\/\" target=\"_blank\">Women Who Go London</a></b></br>Tuesday, 27 September 2022");
-      marker.on('mouseover',function() {
-        this.openPopup();
-      });
-      marker.on('mouseout',function() {
-        this.closePopup();
-      });
     
       var icon = L.icon({
       iconUrl: "icons/default.jpg",
