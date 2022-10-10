@@ -4,6 +4,11 @@ This repository is used to display upcoming local meetups based around Go on a m
 
 You can see the site up and running here: https://jaminologist.github.io/golang-meetup-map/
 
+# NOW DEPRECATED
+Turns out, this already exists on Meetup.com. [Go Meetup Map on Meetup](https://www.meetup.com/pro/go/) I was planning on using the Meetup API to automatically update this map with scheduled runs. However, I'd essentially be recreating the above. I'll keep the repo open as it was fun to make, but there won't be anymore updates.
+
+Everything below this is how the Readme was before deprecation.
+
 ## How To Contribute?
 
 If you have a meetup that you want to add to the Map, simply open a pull request and add it to the [meetups.csv](docs/meetups.csv) file located in the docs folder. 
